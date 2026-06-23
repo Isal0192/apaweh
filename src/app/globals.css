@@ -1,0 +1,277 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  
+  --font-sans: var(--font-outfit), var(--font-geist-sans), sans-serif;
+  --font-serif: var(--font-lora), Georgia, serif;
+  --font-mono: var(--font-geist-mono), monospace;
+}
+
+:root {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --border: #e2e8f0;
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+  --primary: #4f46e5;
+  --primary-foreground: #ffffff;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+}
+
+.dark {
+  --background: #060913;
+  --foreground: #f8fafc;
+  --card: #0c1222;
+  --card-foreground: #f8fafc;
+  --border: #1e293b;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --muted: #162032;
+  --muted-foreground: #94a3b8;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes floatGlow {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10px, -20px) scale(1.05);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0; /* Keep hidden before animation starts */
+}
+
+.animate-float-glow {
+  animation: floatGlow 8s ease-in-out infinite;
+}
+
+/* Staggered Delay Utilities */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+
+/* Custom Glow on Hover */
+.glow-card-hover {
+  position: relative;
+  transition: all 0.3s ease;
+}
+.glow-card-hover::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(135deg, var(--primary), #ec4899);
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.glow-card-hover:hover::after {
+  opacity: 0.15;
+}
+
+.dark .glow-card-hover:hover::after {
+  opacity: 0.3;
+}
+
+/* Explicit News Portal Typography Styles */
+.prose blockquote {
+  border-left: 4px solid var(--primary) !important;
+  padding-left: 1.25rem !important;
+  font-style: italic !important;
+  color: var(--muted-foreground) !important;
+  margin: 1.75rem 0 !important;
+}
+
+.prose img {
+  border-radius: 1.25rem !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05) !important;
+  margin: 1.75rem 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  border: 1px solid var(--border) !important;
+}
+
+.prose pre {
+  background-color: var(--muted) !important;
+  padding: 1.25rem !important;
+  border-radius: 1rem !important;
+  font-family: var(--font-mono) !important;
+  font-size: 0.825rem !important;
+  overflow-x: auto !important;
+  border: 1px solid var(--border) !important;
+  margin: 1.75rem 0 !important;
+}
+
+.prose h1, .prose h2, .prose h3 {
+  color: var(--foreground) !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.025em !important;
+  line-height: 1.25 !important;
+}
+
+.prose h1 {
+  font-size: 1.875rem !important;
+  margin: 2.25rem 0 1.25rem 0 !important;
+}
+
+.prose h2 {
+  font-size: 1.5rem !important;
+  margin: 2rem 0 1rem 0 !important;
+}
+
+.prose h3 {
+  font-size: 1.25rem !important;
+  margin: 1.75rem 0 0.75rem 0 !important;
+}
+
+.prose p {
+  margin-bottom: 1.25rem !important;
+  line-height: 1.8 !important;
+  color: var(--foreground) !important;
+}
+
+.prose ul {
+  list-style-type: disc !important;
+  padding-left: 1.5rem !important;
+  margin: 1.25rem 0 !important;
+  space-y: 0.5rem !important;
+}
+
+.prose li {
+  margin-bottom: 0.5rem !important;
+}
+
+.prose a {
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+  font-weight: 600 !important;
+}
+
+/* Editorial & Minimal Brutalism Card Styles */
+.brutalist-card {
+  border: 1px solid var(--border) !important;
+  border-radius: 1.5rem !important;
+  box-shadow: 3px 3px 0px 0px var(--border) !important;
+  background-color: var(--card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.brutalist-card:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px 0px var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.dark .brutalist-card {
+  border: 1px solid var(--border) !important;
+  box-shadow: 3px 3px 0px 0px var(--border) !important;
+}
+
+.dark .brutalist-card:hover {
+  box-shadow: 6px 6px 0px 0px var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Brutalist Flat Button */
+.brutalist-btn {
+  border: 1px solid var(--border) !important;
+  border-radius: 0.75rem !important;
+  box-shadow: 2px 2px 0px 0px var(--border) !important;
+  background-color: var(--card);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.brutalist-btn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0px 0px var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.dark .glass-panel {
+  background: rgba(12, 18, 34, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+

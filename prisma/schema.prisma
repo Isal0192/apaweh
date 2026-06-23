@@ -1,0 +1,50 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id       String @id @default(uuid())
+  username String @unique
+  password String
+  role     String // 'admin' | 'author'
+  name     String
+}
+
+model Project {
+  id          String  @id @default(uuid())
+  title       String
+  description String  @db.Text
+  category    String  // 'Web App' | 'Homelab' | 'DevOps'
+  tags        String  // Comma-separated tags
+  demoUrl     String?
+  githubUrl   String?
+  imageUrl    String?
+}
+
+model BlogPost {
+  id       String @id @default(uuid())
+  title    String
+  slug     String @unique
+  date     String
+  summary  String @db.Text
+  content  String @db.LongText
+  tags     String // Comma-separated tags
+  readTime String
+}
+
+model ShareLink {
+  id          String @id @default(uuid())
+  title       String
+  description String @db.Text
+  category    String
+  url         String @db.Text
+  createdAt   String
+  slug        String? @unique
+}
