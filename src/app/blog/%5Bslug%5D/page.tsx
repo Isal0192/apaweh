@@ -19,13 +19,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   
   if (!post) {
     return {
-      title: 'Artikel Tidak Ditemukan | Workspace Hub Jurnal',
-      description: 'Membaca artikel jurnal teknologi dan dokumentasi server homelab.',
+      title: 'Tulisan Tidak Ditemukan | Workspace Hub Tulisan',
+      description: 'Membaca tulisan teknologi dan dokumentasi server homelab.',
     };
   }
 
   return {
-    title: `${post.title} | Workspace Hub Jurnal`,
+    title: `${post.title} | Workspace Hub Tulisan`,
     description: post.summary,
     openGraph: {
       title: post.title,

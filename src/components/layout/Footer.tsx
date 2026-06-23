@@ -17,7 +17,7 @@ export const Footer: React.FC = () => {
           </div>
           <div className="flex gap-6 font-semibold">
             <motion.a whileHover={{ y: -2, color: 'var(--primary)' }} href="#" className="hover:text-primary transition-colors">Profile</motion.a>
-            <motion.a whileHover={{ y: -2, color: 'var(--primary)' }} href="#" className="hover:text-primary transition-colors">Blog</motion.a>
+            <motion.a whileHover={{ y: -2, color: 'var(--primary)' }} href="#" className="hover:text-primary transition-colors">Tulisan</motion.a>
             <motion.a whileHover={{ y: -2, color: 'var(--primary)' }} href="#" className="hover:text-primary transition-colors">Playground</motion.a>
             <motion.a whileHover={{ y: -2, color: 'var(--primary)' }} href="#" className="hover:text-primary transition-colors">Sharing</motion.a>
           </div>

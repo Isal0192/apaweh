@@ -73,9 +73,7 @@ export const SharingCard: React.FC<SharingCardProps> = ({ link, isAdmin, onDelet
           </div>
           
           <div className="px-6 py-4 mt-6 border-t border-foreground/10 bg-black/5 dark:bg-white/5 flex gap-3 justify-between items-center backdrop-blur-sm">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-muted-foreground">
-              Dibuat: {link.createdAt}
-            </span>
+              
             <div className="flex gap-2">
               <motion.button
                 whileHover={{ scale: 1.05 }}

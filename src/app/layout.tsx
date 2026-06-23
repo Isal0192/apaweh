@@ -25,7 +25,7 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   title: "Personal Workspace Hub | Faisal S. Dashboard",
-  description: "All-in-One Dashboard Hub: Professional Portfolio, Technical Blog Jurnal, Web App Generator Playground, and Media Sharing Hub.",
+  description: "All-in-One Dashboard Hub: Professional Portfolio, Technical Tulisan, Web App Generator Playground, and Media Sharing Hub.",
   keywords: ["Faisal S.", "Frontend Engineer", "UI/UX Expert", "Next.js", "React Portfolio", "DevOps Homelab"],
   authors: [{ name: "Faisal S.", url: "https://example.com" }],
   creator: "Faisal S.",

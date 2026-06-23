@@ -52,9 +52,9 @@ export const BlogList: React.FC<BlogListProps> = ({
       <motion.div variants={itemVariants} className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-border/40 pb-4">
         <div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-            <h2 className="text-3xl font-black tracking-tight text-foreground bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
-              Catatan Jurnal & Opini
-            </h2>
+                <h2 className="text-3xl font-black tracking-tight text-foreground bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
+                  Catatan Tulisan & Opini
+                </h2>
             {isAdmin && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 text-amber-500 self-center">
                 <ShieldCheck className="w-3.5 h-3.5" />
@@ -203,12 +203,12 @@ export const BlogList: React.FC<BlogListProps> = ({
         </motion.div>
       )}
 
-      {filteredPosts.length === 0 && (
+          {filteredPosts.length === 0 && (
         <motion.div 
           variants={itemVariants}
           className="text-center py-16 text-foreground/70 font-medium glass-panel border border-border/40 bg-black/5 dark:bg-white/5 backdrop-blur-sm"
         >
-          Tidak ada artikel yang cocok dengan filter atau pencarian Anda. {isAdmin && 'Buat artikel baru di Admin Panel!'}
+              Tidak ada tulisan yang cocok dengan filter atau pencarian Anda. {isAdmin && 'Buat tulisan baru di Admin Panel!'}
         </motion.div>
       )}
     </motion.div>

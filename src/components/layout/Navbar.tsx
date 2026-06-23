@@ -24,7 +24,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const menuItems = [
     { id: 'portfolio', label: 'Profile', icon: <User className="w-4 h-4" /> },
-    { id: 'blog', label: 'Blog Jurnal', icon: <BookOpen className="w-4 h-4" /> },
+    { id: 'blog', label: 'Tulisan', icon: <BookOpen className="w-4 h-4" /> },
     { id: 'playground', label: 'Playground', icon: <Code className="w-4 h-4" /> },
     { id: 'sharing', label: 'Sharing Hub', icon: <Share2 className="w-4 h-4" /> },
     ...(isAdmin ? [{ id: 'admin', label: 'Admin Panel', icon: <ShieldCheck className="w-4 h-4 text-amber-500 animate-pulse" /> }] : []),

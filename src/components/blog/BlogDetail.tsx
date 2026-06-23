@@ -55,15 +55,6 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
                 {selectedPost.readTime}
               </span>
               <div className="flex-1" />
-              {/* Permanent Link for SEO Sharing */}
-              <Link
-                href={`/blog/${selectedPost.slug}`}
-                target="_blank"
-                className="inline-flex items-center gap-1 text-primary hover:underline font-semibold text-xs"
-              >
-                Buka Halaman Terindeks SEO
-                <ExternalLink className="w-3.5 h-3.5" />
-              </Link>
             </div>
 
             <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
@@ -117,7 +108,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
         {/* Author Card / Info */}
         <div className="space-y-4">
           <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Penulis Jurnal
+            Penulis Tulisan
           </h4>
           <div className="flex items-center gap-3 glass-panel p-4 bg-black/5 dark:bg-white/5 border-border/40 backdrop-blur-sm shadow-sm">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-pink-500 flex items-center justify-center font-bold text-white text-sm select-none shadow-md">
@@ -133,7 +124,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
         {/* List of other news */}
         <div className="space-y-4">
           <h4 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            Artikel Lainnya
+            Tulisan Lainnya
           </h4>
           <div className="space-y-3">
             {blogs
@@ -157,7 +148,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
                 </motion.div>
               ))}
             {blogs.filter(post => post.slug !== selectedPost.slug).length === 0 && (
-              <p className="text-xs text-muted-foreground italic">Tidak ada artikel lain.</p>
+              <p className="text-xs text-muted-foreground italic">Tidak ada tulisan lain.</p>
             )}
           </div>
         </div>
@@ -165,7 +156,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
         {/* Sidebar Note */}
         <div className="glass-panel p-4 bg-black/5 dark:bg-white/5 border border-border/40 space-y-2 backdrop-blur-sm">
           <h5 className="font-bold text-xs text-foreground flex items-center gap-1.5">
-            💡 Catatan Jurnal
+            💡 Catatan Tulisan
           </h5>
           <p className="text-[11px] text-foreground/70 leading-relaxed font-medium">
             Catatan dan opini teknis ini ditulis secara berkala berdasarkan kendala nyata dan solusi yang saya temukan dalam proyek harian.

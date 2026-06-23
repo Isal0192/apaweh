@@ -36,7 +36,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             Admin Workspace Controller
           </h2>
           <p className="text-sm text-muted-foreground">
-            Mengelola seluruh konten Portofolio, Jurnal Blog, dan Tautan Media secara dinamis.
+            Mengelola seluruh konten Portofolio, Tulisan, dan Tautan Media secara dinamis.
           </p>
         </div>
 
@@ -51,7 +51,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             }`}
           >
             <FileText className="w-4 h-4" />
-            Kelola Jurnal
+            Kelola Tulisan
           </button>
           <button
             onClick={() => setActiveSubTab('projects')}

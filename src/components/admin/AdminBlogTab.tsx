@@ -101,12 +101,12 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
             <form onSubmit={handleSaveBlog} className="p-6 space-y-4">
               <div className="flex justify-between items-center border-b border-border pb-3">
                 <h3 className="text-lg font-bold text-foreground">
-                  {blogId ? '📝 Edit Jurnal' : '✍️ Tulis Jurnal Baru'}
+                  {blogId ? '📝 Edit Tulisan' : '✍️ Tulis Tulisan Baru'}
                 </h3>
                 <Button type="button" variant="outline" size="sm" onClick={handleResetBlogForm}>Reset Form</Button>
               </div>
               <div className="space-y-4">
-                <Input label="Judul Artikel" required value={blogTitle} onChange={(e) => setBlogTitle(e.target.value)} placeholder="e.g. Panduan Praktis Konfigurasi Kubernetes Multi-Node" />
+                <Input label="Judul Tulisan" required value={blogTitle} onChange={(e) => setBlogTitle(e.target.value)} placeholder="e.g. Panduan Praktis Konfigurasi Kubernetes Multi-Node" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <Input label="Tags (pisahkan koma)" value={blogTags} onChange={(e) => setBlogTags(e.target.value)} placeholder="Kubernetes, DevOps, Cluster" />
                   <Input label="Read Time" value={blogReadTime} onChange={(e) => setBlogReadTime(e.target.value)} placeholder="8 min read" />
@@ -134,11 +134,11 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
                     <button type="button" onClick={() => insertHtml('<a href="https://example.com" target="_blank" className="text-primary hover:underline font-semibold">', '</a>')} className="p-1.5 rounded-lg hover:bg-card text-foreground hover:text-primary transition-all cursor-pointer"><LinkIcon className="w-3.5 h-3.5" /></button>
                     <button type="button" onClick={() => insertHtml('<ul className="list-disc pl-6 my-4 space-y-1">\n  <li>', '</li>\n  <li>Item Baru</li>\n</ul>')} className="p-1.5 rounded-lg hover:bg-card text-foreground hover:text-primary transition-all cursor-pointer"><List className="w-3.5 h-3.5" /></button>
                   </div>
-                  <textarea ref={textareaRef} required value={blogContent} onChange={(e) => setBlogContent(e.target.value)} placeholder="Mulai menulis jurnal berita di sini..." className="w-full h-[500px] p-4 font-mono text-xs rounded-2xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y overflow-y-auto" />
+                  <textarea ref={textareaRef} required value={blogContent} onChange={(e) => setBlogContent(e.target.value)} placeholder="Mulai menulis tulisan di sini..." className="w-full h-[500px] p-4 font-mono text-xs rounded-2xl border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y overflow-y-auto" />
                 </div>
               </div>
               <Button type="submit" className="w-full h-11 flex items-center justify-center gap-2 mt-4 text-sm font-bold shadow-sm">
-                <Save className="w-4 h-4" /> {blogId ? 'Simpan Perubahan Jurnal' : 'Publish Jurnal Baru'}
+                <Save className="w-4 h-4" /> {blogId ? 'Simpan Perubahan Tulisan' : 'Publish Tulisan Baru'}
               </Button>
             </form>
           </Card>
@@ -169,7 +169,7 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
                 </header>
                 {blogContent ? (
                   <div className="prose prose-slate dark:prose-invert max-w-none text-sm leading-relaxed space-y-4 text-foreground prose-headings:font-extrabold prose-headings:tracking-tight prose-headings:text-foreground prose-h1:text-2xl prose-h2:text-xl prose-h3:text-lg prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-muted-foreground prose-pre:bg-muted prose-pre:p-4 prose-pre:rounded-xl prose-pre:font-mono prose-pre:text-[11px] prose-pre:overflow-x-auto prose-img:rounded-2xl prose-img:shadow-md" dangerouslySetInnerHTML={{ __html: sanitizeHtml(blogContent) }} />
-                ) : <p className="text-muted-foreground italic text-xs text-center py-20">Mulai tulis konten artikel Anda untuk melihat live preview di sini...</p>}
+                ) : <p className="text-muted-foreground italic text-xs text-center py-20">Mulai tulis konten tulisan Anda untuk melihat live preview di sini...</p>}
               </article>
             ) : (
               <div className="flex flex-col items-center justify-center text-center py-32 text-muted-foreground space-y-2">
@@ -184,7 +184,7 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
 
       {/* List of articles */}
       <div className="border-t border-border/80 pt-6 space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Daftar Artikel Jurnal ({blogs.length})</h3>
+        <h3 className="text-sm font-bold uppercase tracking-wider text-muted-foreground">Daftar Tulisan ({blogs.length})</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {blogs.map((post) => (
             <Card key={post.id || post.slug} className="group border border-border/80 hover:border-primary/30 flex flex-col justify-between">
@@ -204,7 +204,7 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
             </Card>
           ))}
           {blogs.length === 0 && (
-            <div className="col-span-full text-center py-12 text-xs text-muted-foreground bg-card border border-border rounded-2xl">Belum ada jurnal yang ditulis. Mulai buat jurnal pertama Anda di atas!</div>
+            <div className="col-span-full text-center py-12 text-xs text-muted-foreground bg-card border border-border rounded-2xl">Belum ada tulisan yang ditulis. Mulai buat tulisan pertama Anda di atas!</div>
           )}
         </div>
       </div>
