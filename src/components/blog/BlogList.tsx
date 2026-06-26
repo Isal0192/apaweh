@@ -6,6 +6,8 @@ import { BlogCard } from './BlogCard';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, ShieldCheck, Calendar, BookOpen, BookOpenCheck, ArrowRight } from 'lucide-react';
 
+import { User } from '../../types';
+
 interface BlogListProps {
   filteredPosts: BlogPost[];
   headlinePost: BlogPost | null;
@@ -16,6 +18,7 @@ interface BlogListProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   isAdmin: boolean;
+  currentUser?: User | null;
   handleOpenPost: (post: BlogPost) => void;
 }
 
@@ -39,8 +42,11 @@ export const BlogList: React.FC<BlogListProps> = ({
   searchQuery,
   setSearchQuery,
   isAdmin,
+  currentUser,
   handleOpenPost,
 }) => {
+  const canAdminister = isAdmin || currentUser?.role === 'author_blog';
+
   return (
     <motion.div 
       className="space-y-8"
@@ -55,10 +61,10 @@ export const BlogList: React.FC<BlogListProps> = ({
                 <h2 className="text-3xl font-black tracking-tight text-foreground bg-gradient-to-r from-primary to-pink-500 bg-clip-text text-transparent">
                   Catatan Tulisan & Opini
                 </h2>
-            {isAdmin && (
+            {canAdminister && (
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 border border-amber-500/20 text-amber-500 self-center">
                 <ShieldCheck className="w-3.5 h-3.5" />
-                Admin Panel Mode
+                {isAdmin ? 'Admin Mode' : 'Author Mode'}
               </span>
             )}
           </div>
@@ -82,7 +88,7 @@ export const BlogList: React.FC<BlogListProps> = ({
 
       {/* Dynamic Tag/Category Navigation Filter */}
       {allTags.length > 1 && (
-        <motion.div variants={itemVariants} className="flex flex-wrap gap-2 border-b border-border/40 pb-4 overflow-x-auto">
+        <motion.div variants={itemVariants} className="flex flex-nowrap gap-2 border-b border-border/40 pb-4 overflow-x-auto hide-scrollbar">
           {allTags.map((tag) => (
             <motion.button
               whileHover={{ scale: 1.05 }}
@@ -113,7 +119,7 @@ export const BlogList: React.FC<BlogListProps> = ({
           <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-primary/10 rounded-full blur-[80px] pointer-events-none" />
 
           {/* Animated Tech Gradient Cover Placeholder */}
-          <div className="lg:col-span-7 aspect-video lg:aspect-auto min-h-[220px] md:min-h-[280px] rounded-2xl bg-gradient-to-br from-primary/20 via-pink-500/10 to-indigo-500/20 flex flex-col justify-between p-6 relative overflow-hidden border border-border/45 select-none glass-panel">
+          <div className="lg:col-span-7 w-full min-h-[200px] md:min-h-[280px] rounded-2xl bg-gradient-to-br from-primary/20 via-pink-500/10 to-indigo-500/20 flex flex-col justify-between p-6 relative overflow-hidden border border-border/45 select-none glass-panel">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent -z-10" />
             <span className="px-3 py-1 self-start rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-primary/25 border border-primary/30 text-primary backdrop-blur-md">
               Headline Utama
@@ -151,7 +157,7 @@ export const BlogList: React.FC<BlogListProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-border/40">
-              <div className="flex flex-wrap gap-1">
+              <div className="flex flex-wrap gap-2">
                 {headlinePost.tags.slice(0, 3).map((tag, idx) => (
                   <span
                     key={idx}
@@ -203,12 +209,12 @@ export const BlogList: React.FC<BlogListProps> = ({
         </motion.div>
       )}
 
-          {filteredPosts.length === 0 && (
+      {filteredPosts.length === 0 && (
         <motion.div 
           variants={itemVariants}
           className="text-center py-16 text-foreground/70 font-medium glass-panel border border-border/40 bg-black/5 dark:bg-white/5 backdrop-blur-sm"
         >
-              Tidak ada tulisan yang cocok dengan filter atau pencarian Anda. {isAdmin && 'Buat tulisan baru di Admin Panel!'}
+              Tidak ada tulisan yang cocok dengan filter atau pencarian Anda. {canAdminister && 'Buat tulisan baru di Admin Panel!'}
         </motion.div>
       )}
     </motion.div>

@@ -66,7 +66,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
             </p>
 
             {/* Tags */}
-            <div className="flex flex-wrap gap-1.5 pt-1">
+            <div className="flex flex-nowrap gap-2 pt-1 overflow-x-auto hide-scrollbar">
               {selectedPost.tags.map((tag, i) => (
                 <span
                   key={i}

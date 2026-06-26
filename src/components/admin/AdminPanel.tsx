@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Project, BlogPost, ShareLink } from '../../types';
+import { Project, BlogPost, ShareLink, User } from '../../types';
 import { FileText, Briefcase, Link2 } from 'lucide-react';
 
 import { AdminBlogTab } from './AdminBlogTab';
@@ -15,6 +15,7 @@ interface AdminPanelProps {
   setBlogs: (blogs: BlogPost[]) => void;
   links: ShareLink[];
   setLinks: (links: ShareLink[]) => void;
+  currentUser: User | null;
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -23,9 +24,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   blogs,
   setBlogs,
   links,
-  setLinks
+  setLinks,
+  currentUser
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'blogs' | 'projects' | 'shares'>('blogs');
+  const isAdmin = currentUser?.role === 'admin';
+  const isAuthorBlog = currentUser?.role === 'author_blog';
+  const isAuthorSharing = currentUser?.role === 'author_sharing';
+
+  const [activeSubTab, setActiveSubTab] = useState<'blogs' | 'projects' | 'shares'>(
+    isAuthorSharing ? 'shares' : 'blogs'
+  );
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -42,53 +50,59 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
         {/* Sub-Tabs Switch */}
         <div className="flex bg-muted p-1 rounded-xl border border-border overflow-x-auto max-w-full">
-          <button
-            onClick={() => setActiveSubTab('blogs')}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-              activeSubTab === 'blogs'
-                ? 'bg-card text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            Kelola Tulisan
-          </button>
-          <button
-            onClick={() => setActiveSubTab('projects')}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-              activeSubTab === 'projects'
-                ? 'bg-card text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Briefcase className="w-4 h-4" />
-            Kelola Portfolio
-          </button>
-          <button
-            onClick={() => setActiveSubTab('shares')}
-            className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-              activeSubTab === 'shares'
-                ? 'bg-card text-foreground shadow-sm'
-                : 'text-muted-foreground hover:text-foreground'
-            }`}
-          >
-            <Link2 className="w-4 h-4" />
-            Kelola Sharing Link
-          </button>
+          {(isAdmin || isAuthorBlog) && (
+            <button
+              onClick={() => setActiveSubTab('blogs')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeSubTab === 'blogs'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <FileText className="w-4 h-4" />
+              Kelola Tulisan
+            </button>
+          )}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveSubTab('projects')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeSubTab === 'projects'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Briefcase className="w-4 h-4" />
+              Kelola Portfolio
+            </button>
+          )}
+          {(isAdmin || isAuthorSharing) && (
+            <button
+              onClick={() => setActiveSubTab('shares')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeSubTab === 'shares'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Link2 className="w-4 h-4" />
+              Kelola Sharing Link
+            </button>
+          )}
         </div>
       </div>
 
       {/* SUB TABS CONTENT */}
-      {activeSubTab === 'blogs' && (
-        <AdminBlogTab blogs={blogs} setBlogs={setBlogs} />
+      {activeSubTab === 'blogs' && (isAdmin || isAuthorBlog) && (
+        <AdminBlogTab blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} />
       )}
       
-      {activeSubTab === 'projects' && (
-        <AdminProjectsTab projects={projects} setProjects={setProjects} />
+      {activeSubTab === 'projects' && isAdmin && (
+        <AdminProjectsTab projects={projects} setProjects={setProjects} currentUser={currentUser} />
       )}
       
-      {activeSubTab === 'shares' && (
-        <AdminSharingTab links={links} setLinks={setLinks} />
+      {activeSubTab === 'shares' && (isAdmin || isAuthorSharing) && (
+        <AdminSharingTab links={links} setLinks={setLinks} currentUser={currentUser} />
       )}
     </div>
   );

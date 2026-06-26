@@ -42,6 +42,29 @@ export async function loginUser(username: string, password: string) {
   }
 }
 
+export async function resetUserPassword(username: string, newPassword: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { username },
+    });
+
+    if (!user) {
+      return { success: false, error: 'Pengguna tidak ditemukan.' };
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: { username },
+      data: { password: hashedPassword },
+    });
+
+    return { success: true };
+  } catch (error: any) {
+    console.error('resetUserPassword error:', error);
+    return { success: false, error: 'Gagal mengatur ulang password. Silakan coba lagi.' };
+  }
+}
+
 // ==========================================
 // PROJECT ACTIONS
 // ==========================================

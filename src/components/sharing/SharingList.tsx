@@ -5,9 +5,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Plus, Layers, File, Film, Link as LinkIcon, Server } from 'lucide-react';
 import { Input } from '../ui/Input';
 
+import { User } from '../../types';
+
 interface SharingListProps {
   links: ShareLink[];
   isAdmin: boolean;
+  currentUser?: User | null;
   onDeleteLink: (id: string, e: React.MouseEvent) => void;
   onOpenPlayer: (link: ShareLink, e: React.MouseEvent) => void;
   onAddClick?: () => void;
@@ -26,7 +29,7 @@ const itemVariants = {
   show: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 300, damping: 24 } },
 };
 
-export const SharingList: React.FC<SharingListProps> = ({ links, isAdmin, onDeleteLink, onOpenPlayer, onAddClick }) => {
+export const SharingList: React.FC<SharingListProps> = ({ links, isAdmin, currentUser, onDeleteLink, onOpenPlayer, onAddClick }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Semua');
   const [allCategories, setAllCategories] = useState<string[]>(['Semua']);
@@ -69,7 +72,7 @@ export const SharingList: React.FC<SharingListProps> = ({ links, isAdmin, onDele
           </p>
         </div>
 
-        {isAdmin && onAddClick && (
+        {(isAdmin || currentUser?.role === 'author_sharing') && onAddClick && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -139,7 +142,7 @@ export const SharingList: React.FC<SharingListProps> = ({ links, isAdmin, onDele
           variants={itemVariants}
           className="text-center py-16 text-foreground/60 glass-panel font-medium"
         >
-          Tidak ada tautan sharing yang cocok. {isAdmin && 'Klik "Tambah Link" untuk membuat baru!'}
+          Tidak ada tautan sharing yang cocok. {(isAdmin || currentUser?.role === 'author_sharing') && 'Klik "Tambah Link" untuk membuat baru!'}
         </motion.div>
       )}
     </div>

@@ -5,10 +5,13 @@ import { ThemeToggle } from './ThemeToggle';
 import { LayoutDashboard, User, BookOpen, Code, Share2, Menu, X, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+import { User } from '../../types';
+
 interface NavbarProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   isAdmin: boolean;
+  currentUser: User | null;
   onLoginClick: () => void;
   onLogoutClick: () => void;
 }
@@ -17,6 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   activeTab, 
   setActiveTab, 
   isAdmin, 
+  currentUser,
   onLoginClick, 
   onLogoutClick 
 }) => {
@@ -27,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({
     { id: 'blog', label: 'Tulisan', icon: <BookOpen className="w-4 h-4" /> },
     { id: 'playground', label: 'Playground', icon: <Code className="w-4 h-4" /> },
     { id: 'sharing', label: 'Sharing Hub', icon: <Share2 className="w-4 h-4" /> },
-    ...(isAdmin ? [{ id: 'admin', label: 'Admin Panel', icon: <ShieldCheck className="w-4 h-4 text-amber-500 animate-pulse" /> }] : []),
+    ...(currentUser ? [{ id: 'admin', label: 'Admin Panel', icon: <ShieldCheck className={`w-4 h-4 ${isAdmin ? 'text-amber-500' : 'text-blue-500'} animate-pulse`} /> }] : []),
   ];
 
   const handleTabSelect = (tabId: string) => {
@@ -61,7 +65,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </motion.div>
 
           {/* Desktop Tabs */}
-          <div className="hidden md:flex items-center gap-1.5">
+          <div className="hidden lg:flex items-center gap-1.5">
             {menuItems.map((item) => (
               <motion.button
                 whileHover={{ scale: 1.05, y: -2 }}
@@ -86,12 +90,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <ThemeToggle />
             
             {/* Admin Login/Logout Desktop */}
-            {isAdmin ? (
+            {currentUser ? (
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onLogoutClick}
-                className="hidden md:inline-flex px-4 py-1.5 text-sm font-bold rounded-full border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-colors"
+                className="hidden lg:inline-flex px-4 py-1.5 text-sm font-bold rounded-full border border-red-500/20 text-red-500 hover:bg-red-500/10 transition-colors"
               >
                 Logout
               </motion.button>
@@ -100,7 +104,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={onLoginClick}
-                className="hidden md:inline-flex px-4 py-1.5 text-sm font-bold rounded-full border border-border text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
+                className="hidden lg:inline-flex px-4 py-1.5 text-sm font-bold rounded-full border border-border text-foreground/70 hover:text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
               >
                 Login
               </motion.button>
@@ -110,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               whileTap={{ scale: 0.9 }}
               type="button"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
-              className="md:hidden p-2 rounded-full border border-border text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
+              className="lg:hidden p-2 rounded-full border border-border text-foreground hover:bg-black/5 dark:hover:bg-white/5 transition-colors focus:outline-none"
               aria-label="Toggle Navigation Menu"
             >
               {isMobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -126,7 +130,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
-              className="md:hidden overflow-hidden border-t border-border/50 bg-black/5 dark:bg-white/5 backdrop-blur-xl rounded-b-2xl"
+              className="lg:hidden overflow-hidden border-t border-border/50 bg-black/5 dark:bg-white/5 backdrop-blur-xl rounded-b-2xl"
             >
               <div className="px-4 py-4 space-y-2">
                 {menuItems.map((item) => (
@@ -146,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 
                 {/* Mobile Admin Action Button */}
                 <div className="pt-2 border-t border-border/50 mt-2">
-                  {isAdmin ? (
+                  {currentUser ? (
                     <button
                       onClick={() => { onLogoutClick(); setIsMobileOpen(false); }}
                       className="w-full px-4 py-3 text-sm font-bold text-red-500 rounded-xl hover:bg-red-500/10 transition-colors text-left"

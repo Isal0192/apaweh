@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { BlogPost } from '../../types';
+import { BlogPost, User } from '../../types';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Edit3, Trash2, Save, FileText, Bold, Italic, Quote, Code, Image as ImageIcon, List, Link as LinkIcon } from 'lucide-react';
@@ -14,9 +14,10 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 interface AdminBlogTabProps {
   blogs: BlogPost[];
   setBlogs: (blogs: BlogPost[]) => void;
+  currentUser: User | null;
 }
 
-export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) => {
+export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs, currentUser }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [blogId, setBlogId] = useState<string | null>(null);
@@ -191,10 +192,12 @@ export const AdminBlogTab: React.FC<AdminBlogTabProps> = ({ blogs, setBlogs }) =
               <div className="p-5 space-y-3">
                 <div className="flex justify-between items-start gap-2">
                   <h4 className="font-bold text-sm text-foreground group-hover:text-primary transition-colors line-clamp-2 leading-tight">{post.title}</h4>
-                  <div className="flex gap-1 flex-shrink-0">
-                    <button onClick={() => handleEditBlog(post)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors cursor-pointer" title="Edit Post"><Edit3 className="w-4 h-4" /></button>
-                    <button onClick={() => handleDeleteBlog(post.id)} className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-colors cursor-pointer" title="Delete Post"><Trash2 className="w-4 h-4" /></button>
-                  </div>
+                  {currentUser?.role === 'admin' && (
+                    <div className="flex gap-1 flex-shrink-0">
+                      <button onClick={() => handleEditBlog(post)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded-lg transition-colors cursor-pointer" title="Edit Post"><Edit3 className="w-4 h-4" /></button>
+                      <button onClick={() => handleDeleteBlog(post.id)} className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/5 rounded-lg transition-colors cursor-pointer" title="Delete Post"><Trash2 className="w-4 h-4" /></button>
+                    </div>
+                  )}
                 </div>
                 <p className="text-xs text-muted-foreground line-clamp-3 leading-relaxed">{post.summary}</p>
               </div>

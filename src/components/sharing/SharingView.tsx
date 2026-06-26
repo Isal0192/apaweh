@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { ShareLink } from '../../types';
+import { ShareLink, User } from '../../types';
 import { generateSlug } from '../../utils/slug';
 import { getGDriveEmbedUrl, getYouTubeEmbedUrl } from '../../utils/media';
 import { AddLinkModal } from './AddLinkModal';
@@ -13,9 +13,10 @@ interface SharingViewProps {
   links: ShareLink[];
   setLinks?: (links: ShareLink[]) => void;
   isAdmin: boolean;
+  currentUser: User | null;
 }
 
-export const SharingView: React.FC<SharingViewProps> = ({ links, setLinks, isAdmin }) => {
+export const SharingView: React.FC<SharingViewProps> = ({ links, setLinks, isAdmin, currentUser }) => {
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [activeMediaUrl, setActiveMediaUrl] = useState<string | null>(null);
   const [activeMediaTitle, setActiveMediaTitle] = useState('');
@@ -105,6 +106,7 @@ export const SharingView: React.FC<SharingViewProps> = ({ links, setLinks, isAdm
             key="list"
             links={links}
             isAdmin={isAdmin}
+            currentUser={currentUser}
             onDeleteLink={handleDeleteLink}
             onOpenPlayer={handleOpenPlayer}
             onAddClick={() => setIsAddOpen(true)}
@@ -112,7 +114,7 @@ export const SharingView: React.FC<SharingViewProps> = ({ links, setLinks, isAdm
         )}
       </AnimatePresence>
 
-      {isAdmin && (
+      {(isAdmin || currentUser?.role === 'author_sharing') && (
         <AddLinkModal
           isOpen={isAddOpen}
           onClose={() => setIsAddOpen(false)}

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
-import { BlogPost } from '../../types';
+import { BlogPost, User } from '../../types';
 import { BlogDetail } from './BlogDetail';
 import { BlogList } from './BlogList';
 import { AnimatePresence } from 'framer-motion';
@@ -10,9 +10,10 @@ import { AnimatePresence } from 'framer-motion';
 interface BlogViewProps {
   blogs: BlogPost[];
   isAdmin: boolean;
+  currentUser?: User | null;
 }
 
-export const BlogView: React.FC<BlogViewProps> = ({ blogs, isAdmin }) => {
+export const BlogView: React.FC<BlogViewProps> = ({ blogs, isAdmin, currentUser }) => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -103,6 +104,7 @@ export const BlogView: React.FC<BlogViewProps> = ({ blogs, isAdmin }) => {
           searchQuery={searchQuery}
           setSearchQuery={setSearchQuery}
           isAdmin={isAdmin}
+          currentUser={currentUser}
           handleOpenPost={handleOpenPost}
         />
       )}

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ShareLink } from '../../types';
+import { ShareLink, User } from '../../types';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Edit3, Trash2, Save } from 'lucide-react';
@@ -13,9 +13,10 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 interface AdminSharingTabProps {
   links: ShareLink[];
   setLinks: (links: ShareLink[]) => void;
+  currentUser: User | null;
 }
 
-export const AdminSharingTab: React.FC<AdminSharingTabProps> = ({ links, setLinks }) => {
+export const AdminSharingTab: React.FC<AdminSharingTabProps> = ({ links, setLinks, currentUser }) => {
   const [linkId, setLinkId] = useState<string | null>(null);
   const [linkTitle, setLinkTitle] = useState('');
   const [linkDesc, setLinkDesc] = useState('');
@@ -112,10 +113,12 @@ export const AdminSharingTab: React.FC<AdminSharingTabProps> = ({ links, setLink
                   <h4 className="font-bold text-sm truncate text-foreground">{l.title}</h4>
                   <p className="text-xs text-muted-foreground truncate">{l.url}</p>
                 </div>
-                <div className="flex gap-1 flex-shrink-0">
-                  <button onClick={() => handleEditLink(l)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors" title="Edit Link"><Edit3 className="w-4 h-4" /></button>
-                  <button onClick={() => handleDeleteLink(l.id)} className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/5 rounded transition-colors" title="Delete Link"><Trash2 className="w-4 h-4" /></button>
-                </div>
+                {currentUser?.role === 'admin' && (
+                  <div className="flex gap-1 flex-shrink-0">
+                    <button onClick={() => handleEditLink(l)} className="p-1.5 text-muted-foreground hover:text-primary hover:bg-muted rounded transition-colors" title="Edit Link"><Edit3 className="w-4 h-4" /></button>
+                    <button onClick={() => handleDeleteLink(l.id)} className="p-1.5 text-muted-foreground hover:text-red-500 hover:bg-red-500/5 rounded transition-colors" title="Delete Link"><Trash2 className="w-4 h-4" /></button>
+                  </div>
+                )}
               </div>
             </Card>
           ))}

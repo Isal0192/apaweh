@@ -42,7 +42,7 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, onClick }) => {
         </p>
 
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 pt-2">
+        <div className="flex flex-nowrap gap-2 pt-2 overflow-x-auto hide-scrollbar">
           {post.tags.map((tag, i) => (
             <span
               key={i}

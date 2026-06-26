@@ -67,7 +67,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
 
           {/* Kiri - Bio & Informasi Teknis (7 Kolom) */}
-          <div className="lg:col-span-7 space-y-6 md:space-y-8 order-2 lg:order-1">
+          <div className="lg:col-span-7 space-y-6 md:space-y-8">
             {/* Tagline / Subtitle */}
             <motion.div variants={itemVariants} className="inline-flex items-center gap-3">
               <div className="w-8 h-[1px] bg-primary/50"></div>
@@ -161,7 +161,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
           {/* Kanan - Foto Profil Besar (5 Kolom) */}
           <motion.div 
             variants={itemVariants}
-            className="lg:col-span-5 relative w-full flex items-center justify-center order-1 lg:order-2 mb-8 lg:mb-0"
+            className="lg:col-span-5 relative w-full hidden md:flex items-center justify-center"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}

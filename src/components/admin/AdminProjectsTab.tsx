@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Project } from '../../types';
+import { Project, User } from '../../types';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
 import { Edit3, Trash2, Save } from 'lucide-react';
@@ -12,9 +12,10 @@ const generateId = () => Math.random().toString(36).substring(2, 9);
 interface AdminProjectsTabProps {
   projects: Project[];
   setProjects: (projects: Project[]) => void;
+  currentUser: User | null;
 }
 
-export const AdminProjectsTab: React.FC<AdminProjectsTabProps> = ({ projects, setProjects }) => {
+export const AdminProjectsTab: React.FC<AdminProjectsTabProps> = ({ projects, setProjects, currentUser }) => {
   const [projId, setProjId] = useState<string | null>(null);
   const [projTitle, setProjTitle] = useState('');
   const [projDesc, setProjDesc] = useState('');
@@ -114,10 +115,12 @@ export const AdminProjectsTab: React.FC<AdminProjectsTabProps> = ({ projects, se
                   <span className="px-2 py-0.5 text-[9px] font-bold uppercase rounded bg-primary/10 text-primary border border-primary/20">
                     {p.category}
                   </span>
-                  <div className="flex gap-1">
-                    <button onClick={() => handleEditProject(p)} className="p-1 text-muted-foreground hover:text-primary rounded transition-colors" title="Edit Project"><Edit3 className="w-3.5 h-3.5" /></button>
-                    <button onClick={() => handleDeleteProject(p.id)} className="p-1 text-muted-foreground hover:text-red-500 rounded transition-colors" title="Delete Project"><Trash2 className="w-3.5 h-3.5" /></button>
-                  </div>
+                  {currentUser?.role === 'admin' && (
+                    <div className="flex gap-1">
+                      <button onClick={() => handleEditProject(p)} className="p-1 text-muted-foreground hover:text-primary rounded transition-colors" title="Edit Project"><Edit3 className="w-3.5 h-3.5" /></button>
+                      <button onClick={() => handleDeleteProject(p.id)} className="p-1 text-muted-foreground hover:text-red-500 rounded transition-colors" title="Delete Project"><Trash2 className="w-3.5 h-3.5" /></button>
+                    </div>
+                  )}
                 </div>
                 <h4 className="font-extrabold text-sm text-foreground">{p.title}</h4>
                 <p className="text-xs text-muted-foreground line-clamp-3">{p.description}</p>

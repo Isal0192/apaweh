@@ -10,7 +10,7 @@ import { PlaygroundView } from '../playground/PlaygroundView';
 import { SharingView } from '../sharing/SharingView';
 import { AdminPanel } from '../admin/AdminPanel';
 import { LoginModal } from '../auth/LoginModal';
-import { Project, BlogPost, ShareLink } from '../../types';
+import { Project, BlogPost, ShareLink, User } from '../../types';
 import {
   createProject,
   updateProject,
@@ -43,7 +43,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [blogs, setBlogs] = useState<BlogPost[]>(initialBlogs);
   const [links, setLinks] = useState<ShareLink[]>(initialLinks);
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const isAdmin = currentUser?.role === 'admin';
   const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   // Synchronize state with initial props if server refetches
@@ -68,15 +69,22 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
     return () => clearTimeout(timer);
   }, [initialLinks]);
 
-  // Sync admin state with LocalStorage on client mount
+  // Sync user state with LocalStorage on client mount
   useEffect(() => {
-    const savedAdmin = localStorage.getItem('hub_is_admin');
-    const initialAdmin = savedAdmin === 'true';
-
-    const timer = setTimeout(() => {
-      setIsAdmin(initialAdmin);
-    }, 0);
-    return () => clearTimeout(timer);
+    const savedUser = localStorage.getItem('hub_user');
+    if (savedUser) {
+      try {
+        const userObj = JSON.parse(savedUser);
+        const timer = setTimeout(() => setCurrentUser(userObj), 0);
+        return () => clearTimeout(timer);
+      } catch (e) {}
+    } else {
+      const savedAdmin = localStorage.getItem('hub_is_admin');
+      if (savedAdmin === 'true') {
+        const timer = setTimeout(() => setCurrentUser({ id: '0', username: 'admin', role: 'admin', name: 'Admin' }), 0);
+        return () => clearTimeout(timer);
+      }
+    }
   }, []);
 
   // Load initial tab selection from URL on client mount
@@ -195,14 +203,16 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const handleLoginSuccess = () => {
-    setIsAdmin(true);
-    localStorage.setItem('hub_is_admin', 'true');
+  const handleLoginSuccess = (user: User) => {
+    setCurrentUser(user);
+    localStorage.setItem('hub_user', JSON.stringify(user));
+    localStorage.setItem('hub_is_admin', user.role === 'admin' ? 'true' : 'false');
     handleTabChange('admin');
   };
 
   const handleLogout = () => {
-    setIsAdmin(false);
+    setCurrentUser(null);
+    localStorage.removeItem('hub_user');
     localStorage.removeItem('hub_is_admin');
     if (activeTab === 'admin') {
       handleTabChange('portfolio');
@@ -214,13 +224,13 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
       case 'portfolio':
         return <ProfileView projects={projects} isAdmin={isAdmin} />;
       case 'blog':
-        return <BlogView blogs={blogs} isAdmin={isAdmin} />;
+        return <BlogView blogs={blogs} isAdmin={isAdmin} currentUser={currentUser} />;
       case 'playground':
         return <PlaygroundView />;
       case 'sharing':
-        return <SharingView links={links} setLinks={saveLinks} isAdmin={isAdmin} />;
+        return <SharingView links={links} setLinks={saveLinks} isAdmin={isAdmin} currentUser={currentUser} />;
       case 'admin':
-        return isAdmin ? (
+        return currentUser ? (
           <AdminPanel
             projects={projects}
             setProjects={saveProjects}
@@ -228,6 +238,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
             setBlogs={saveBlogs}
             links={links}
             setLinks={saveLinks}
+            currentUser={currentUser}
           />
         ) : (
           <ProfileView projects={projects} isAdmin={isAdmin} />
@@ -244,6 +255,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
         activeTab={activeTab}
         setActiveTab={handleTabChange}
         isAdmin={isAdmin}
+        currentUser={currentUser}
         onLoginClick={() => setIsLoginOpen(true)}
         onLogoutClick={handleLogout}
       />
