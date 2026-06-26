@@ -59,7 +59,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
       variants={containerVariants}
     >
       {/* Bio / Profil Singkat - Glassmorphic Aesthetic */}
-      <motion.section variants={itemVariants} className="glass-panel p-8 md:p-12 relative overflow-hidden" aria-label="Profil Singkat">
+      <motion.section variants={itemVariants} className="glass-panel p-5 md:p-12 relative overflow-hidden" aria-label="Profil Singkat">
         {/* Decorative background glows */}
         <div className="absolute top-[-50px] left-[-50px] w-48 h-48 bg-primary/20 rounded-full blur-[80px]" />
         <div className="absolute bottom-[-50px] right-[-50px] w-64 h-64 bg-pink-500/10 rounded-full blur-[100px]" />
@@ -72,7 +72,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
             <motion.div variants={itemVariants} className="inline-flex items-center gap-3">
               <div className="w-8 h-[1px] bg-primary/50"></div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-primary font-semibold">
-                qwerty
+                Hello, I'm
               </span>
             </motion.div>
 
@@ -85,7 +85,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
                 Fajar
               </motion.h1>
               <motion.h1 
-                className="font-sans text-transparent bg-clip-text bg-gradient-to-r from-primary to-pink-500 text-5xl md:text-7xl font-black tracking-tight leading-none pb-2"
+                className="font-sans text-transparent bg-clip-text bg-gradient-to-r from-primary to-pink-500 text-3xl sm:text-5xl md:text-7xl font-black tracking-tight leading-none pb-2"
                 whileHover={{ scale: 1.02, x: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
@@ -93,7 +93,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
               </motion.h1>
             </motion.div>
 
-            <motion.div variants={itemVariants} className="grid grid-cols-2 gap-6 py-4">
+            <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6 py-4">
               <div className="glass-panel p-4 bg-black/5 dark:bg-white/5 border-none">
                 <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Peran</p>
                 <p className="text-sm font-bold text-foreground">Fullstack.</p>
@@ -164,7 +164,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
           {/* Kanan - Foto Profil Besar (5 Kolom) */}
           <motion.div 
             variants={itemVariants}
-            className="lg:col-span-5 relative w-full hidden md:flex items-center justify-center"
+            className="lg:col-span-5 relative w-full flex items-center justify-center mt-8 lg:mt-0"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -172,13 +172,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
               className="relative"
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-pink-500/30 rounded-[3rem] blur-2xl transform rotate-6 scale-105" />
-              <Image
+              <img
                 src="/profile_avatar_tall.png"
                 alt="Faisal S."
-                width={500}
-                height={600}
-                className="w-full max-w-md md:max-w-lg h-auto md:h-[600px] object-contain relative z-10 drop-shadow-2xl"
-                priority
+                className="w-full max-w-xs md:max-w-md lg:max-w-lg h-auto md:h-[600px] object-contain relative z-10 drop-shadow-2xl"
+                loading="eager"
+                style={{ maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)' }}
               />
             </motion.div>
           </motion.div>

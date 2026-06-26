@@ -25,7 +25,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start py-2 w-full"
+      className="grid grid-cols-1 lg:grid-cols-12 gap-y-12 lg:gap-8 items-start py-2 w-full"
     >
       {/* Left Column: Editorial Main Article Content */}
       <div className="lg:col-span-8 space-y-6">
@@ -42,7 +42,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1 }}
-          className="space-y-6 text-foreground glass-panel p-6 md:p-10 border-none bg-transparent dark:bg-transparent"
+          className="space-y-6 text-foreground glass-panel p-4 sm:p-6 md:p-10 border-none bg-transparent dark:bg-transparent"
         >
           <header className="space-y-4 border-b border-border/50 pb-6">
             <div className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
@@ -57,7 +57,7 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
               <div className="flex-1" />
             </div>
 
-            <h1 className="text-3xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
+            <h1 className="text-2xl md:text-5xl font-black tracking-tight text-foreground leading-tight">
               {selectedPost.title}
             </h1>
 

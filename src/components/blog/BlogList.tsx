@@ -107,7 +107,7 @@ export const BlogList: React.FC<BlogListProps> = ({
           variants={itemVariants}
           whileHover={{ y: -5 }}
           onClick={() => handleOpenPost(headlinePost)}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-6 md:p-8 group cursor-pointer border border-border/40 hover:border-primary/50 hover:shadow-xl hover:shadow-primary/10 transition-all duration-300 relative overflow-hidden"
+          className="grid grid-cols-1 lg:grid-cols-12 gap-8 glass-panel p-5 md:p-8 group cursor-pointer border border-border/40 hover:border-primary/50 hover:shadow-2xl hover:shadow-primary/20 transition-all duration-300 relative overflow-hidden"
         >
           {/* Decorative Background */}
           <div className="absolute top-[-50px] right-[-50px] w-48 h-48 bg-primary/10 rounded-full blur-[80px] pointer-events-none" />
