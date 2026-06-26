@@ -13,7 +13,7 @@ interface SharingViewProps {
   links: ShareLink[];
   setLinks?: (links: ShareLink[]) => void;
   isAdmin: boolean;
-  currentUser: User | null;
+  currentUser?: User | null;
 }
 
 export const SharingView: React.FC<SharingViewProps> = ({ links, setLinks, isAdmin, currentUser }) => {

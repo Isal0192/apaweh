@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { ThemeToggle } from './ThemeToggle';
-import { LayoutDashboard, User, BookOpen, Code, Share2, Menu, X, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, User as UserIcon, BookOpen, Code, Share2, Menu, X, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { User } from '../../types';
@@ -27,7 +27,7 @@ export const Navbar: React.FC<NavbarProps> = ({
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   const menuItems = [
-    { id: 'portfolio', label: 'Profile', icon: <User className="w-4 h-4" /> },
+    { id: 'portfolio', label: 'Profile', icon: <UserIcon className="w-4 h-4" /> },
     { id: 'blog', label: 'Tulisan', icon: <BookOpen className="w-4 h-4" /> },
     { id: 'playground', label: 'Playground', icon: <Code className="w-4 h-4" /> },
     { id: 'sharing', label: 'Sharing Hub', icon: <Share2 className="w-4 h-4" /> },
