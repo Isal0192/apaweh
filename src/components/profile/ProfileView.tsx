@@ -67,7 +67,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center relative z-10">
 
           {/* Kiri - Bio & Informasi Teknis (7 Kolom) */}
-          <div className="lg:col-span-7 space-y-6 md:space-y-8">
+          <div className="lg:col-span-7 space-y-6 md:space-y-8 order-2 lg:order-1">
             {/* Tagline / Subtitle */}
             <motion.div variants={itemVariants} className="inline-flex items-center gap-3">
               <div className="w-8 h-[1px] bg-primary/50"></div>
@@ -89,15 +89,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
                 whileHover={{ scale: 1.02, x: 5 }}
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
-                M, S.Gemini, M.GPT, Cld., DpS.
+                <span className='font-sans text-4xl md:text-8xl font-black tracking-tight text-foreground leading-none'>M.</span> S.Gemini, M.GPT, Cld., DpS.
               </motion.h1>
             </motion.div>
 
             <motion.div variants={itemVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-6 py-4">
-              <div className="glass-panel p-4 bg-black/5 dark:bg-white/5 border-none">
-                <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Peran</p>
-                <p className="text-sm font-bold text-foreground">Fullstack.</p>
-              </div>
+        
               <div className="glass-panel p-4 bg-black/5 dark:bg-white/5 border-none">
                 <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Spesialisasi</p>
                 <p className="text-sm font-bold text-foreground">Web App • Homelab Server • 3D Desain</p>
@@ -164,7 +161,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
           {/* Kanan - Foto Profil Besar (5 Kolom) */}
           <motion.div 
             variants={itemVariants}
-            className="lg:col-span-5 relative w-full flex items-center justify-center mt-8 lg:mt-0"
+            className="lg:col-span-5 relative w-full flex items-center justify-center order-1 lg:order-2 mb-8 lg:mb-0"
           >
             <motion.div
               animate={{ y: [0, -10, 0] }}
@@ -174,7 +171,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
               <div className="absolute inset-0 bg-gradient-to-tr from-primary/30 to-pink-500/30 rounded-[3rem] blur-2xl transform rotate-6 scale-105" />
               <img
                 src="/profile_avatar_tall.png"
-                alt="Faisal S."
+                alt="Fajar S."
                 className="w-full max-w-xs md:max-w-md lg:max-w-lg h-auto md:h-[600px] object-contain relative z-10 drop-shadow-2xl"
                 loading="eager"
                 style={{ maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)' }}
