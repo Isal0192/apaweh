@@ -1,12 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Project, BlogPost, ShareLink, User } from '../../types';
-import { FileText, Briefcase, Link2 } from 'lucide-react';
+import { Project, BlogPost, ShareLink, User, PlaygroundApp } from '../../types';
+import { FileText, Briefcase, Link2, LayoutDashboard, Inbox, Gamepad2 } from 'lucide-react';
 
 import { AdminBlogTab } from './AdminBlogTab';
 import { AdminProjectsTab } from './AdminProjectsTab';
 import { AdminSharingTab } from './AdminSharingTab';
+import { AdminOverviewTab } from './AdminOverviewTab';
+import { AdminInboxTab } from './AdminInboxTab';
+import { AdminPlaygroundTab } from './AdminPlaygroundTab';
+
+type AdminTab = 'overview' | 'projects' | 'blog' | 'sharing' | 'inbox' | 'playground';
 
 interface AdminPanelProps {
   projects: Project[];
@@ -15,6 +20,8 @@ interface AdminPanelProps {
   setBlogs: (blogs: BlogPost[]) => void;
   links: ShareLink[];
   setLinks: (links: ShareLink[]) => void;
+  apps: PlaygroundApp[];
+  setApps: (apps: PlaygroundApp[]) => void;
   currentUser: User | null;
 }
 
@@ -25,15 +32,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
   setBlogs,
   links,
   setLinks,
+  apps,
+  setApps,
   currentUser
 }) => {
   const isAdmin = currentUser?.role === 'admin';
   const isAuthorBlog = currentUser?.role === 'author_blog';
   const isAuthorSharing = currentUser?.role === 'author_sharing';
 
-  const [activeSubTab, setActiveSubTab] = useState<'blogs' | 'projects' | 'shares'>(
-    isAuthorSharing ? 'shares' : 'blogs'
-  );
+  const defaultTab = isAdmin ? 'overview' : isAuthorBlog ? 'blog' : 'sharing';
+  const [activeTab, setActiveTab] = useState<AdminTab>(defaultTab as AdminTab);
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -49,12 +57,25 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         </div>
 
         {/* Sub-Tabs Switch */}
-        <div className="flex bg-muted p-1 rounded-xl border border-border overflow-x-auto max-w-full">
+        <div className="flex flex-wrap gap-2 bg-muted p-1 rounded-xl border border-border overflow-x-auto max-w-full">
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('overview')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeTab === 'overview'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              Overview
+            </button>
+          )}
           {(isAdmin || isAuthorBlog) && (
             <button
-              onClick={() => setActiveSubTab('blogs')}
+              onClick={() => setActiveTab('blog')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-                activeSubTab === 'blogs'
+                activeTab === 'blog'
                   ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
@@ -65,9 +86,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           )}
           {isAdmin && (
             <button
-              onClick={() => setActiveSubTab('projects')}
+              onClick={() => setActiveTab('projects')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-                activeSubTab === 'projects'
+                activeTab === 'projects'
                   ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
@@ -78,9 +99,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           )}
           {(isAdmin || isAuthorSharing) && (
             <button
-              onClick={() => setActiveSubTab('shares')}
+              onClick={() => setActiveTab('sharing')}
               className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
-                activeSubTab === 'shares'
+                activeTab === 'sharing'
                   ? 'bg-card text-foreground shadow-sm'
                   : 'text-muted-foreground hover:text-foreground'
               }`}
@@ -89,20 +110,58 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
               Kelola Sharing Link
             </button>
           )}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('inbox')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeTab === 'inbox'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Inbox className="w-4 h-4" />
+              Kotak Masuk
+            </button>
+          )}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('playground')}
+              className={`px-4 py-1.5 text-xs font-semibold rounded-lg flex items-center gap-1.5 transition-all whitespace-nowrap ${
+                activeTab === 'playground'
+                  ? 'bg-card text-foreground shadow-sm'
+                  : 'text-muted-foreground hover:text-foreground'
+              }`}
+            >
+              <Gamepad2 className="w-4 h-4" />
+              Playground
+            </button>
+          )}
         </div>
       </div>
 
       {/* SUB TABS CONTENT */}
-      {activeSubTab === 'blogs' && (isAdmin || isAuthorBlog) && (
+      {activeTab === 'overview' && isAdmin && (
+        <AdminOverviewTab />
+      )}
+
+      {activeTab === 'blog' && (isAdmin || isAuthorBlog) && (
         <AdminBlogTab blogs={blogs} setBlogs={setBlogs} currentUser={currentUser} />
       )}
       
-      {activeSubTab === 'projects' && isAdmin && (
+      {activeTab === 'projects' && isAdmin && (
         <AdminProjectsTab projects={projects} setProjects={setProjects} currentUser={currentUser} />
       )}
       
-      {activeSubTab === 'shares' && (isAdmin || isAuthorSharing) && (
+      {activeTab === 'sharing' && (isAdmin || isAuthorSharing) && (
         <AdminSharingTab links={links} setLinks={setLinks} currentUser={currentUser} />
+      )}
+
+      {activeTab === 'inbox' && isAdmin && (
+        <AdminInboxTab />
+      )}
+
+      {activeTab === 'playground' && isAdmin && (
+        <AdminPlaygroundTab apps={apps} setApps={setApps} />
       )}
     </div>
   );

@@ -1,6 +1,6 @@
 import React from 'react';
 import { BlogPost } from '../../types';
-import { Calendar, BookOpen, ArrowRight } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Eye } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface BlogCardProps {
@@ -26,8 +26,8 @@ export const BlogCard: React.FC<BlogCardProps> = ({ post, onClick }) => {
             {post.date}
           </span>
           <span className="flex items-center gap-1.5 bg-black/5 dark:bg-white/5 px-2 py-1 rounded-md border border-border/40 font-semibold backdrop-blur-sm">
-            <BookOpen className="w-3.5 h-3.5 text-primary" />
-            {post.readTime}
+            <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-primary" /> {post.readTime}</span>
+            <span className="flex items-center gap-1 ml-auto"><Eye className="w-3.5 h-3.5 text-primary" /> {post.views || 0}</span>
           </span>
         </div>
 

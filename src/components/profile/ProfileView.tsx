@@ -3,8 +3,9 @@
 import React, { useState } from 'react';
 import { Project } from '../../types';
 import { ProjectCard } from './ProjectCard';
+import { createContactMessage } from '../../app/actions';
 
-import { Github, Mail, Layers, Globe, Terminal, Server, ShieldCheck } from 'lucide-react';
+import { Github, Mail, Layers, Globe, Terminal, Server, ShieldCheck, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
@@ -46,10 +47,36 @@ const itemVariants = {
 
 export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) => {
   const [activeCategory, setActiveCategory] = useState<CategoryType>('All');
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactMsg, setContactMsg] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const filteredProjects = activeCategory === 'All'
     ? projects
     : projects.filter(project => project.category === activeCategory);
+
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!contactName.trim() || !contactEmail.trim() || !contactMsg.trim()) return;
+    
+    setIsSubmitting(true);
+    setSubmitStatus('idle');
+    
+    const res = await createContactMessage(contactName, contactEmail, contactMsg);
+    
+    setIsSubmitting(false);
+    if (res.success) {
+      setSubmitStatus('success');
+      setContactName('');
+      setContactEmail('');
+      setContactMsg('');
+      setTimeout(() => setSubmitStatus('idle'), 5000);
+    } else {
+      setSubmitStatus('error');
+    }
+  };
 
   return (
     <motion.div 
@@ -245,6 +272,82 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ projects, isAdmin }) =
             Belum ada projek dalam kategori ini. {isAdmin && 'Tambahkan projek di Admin Panel!'}
           </motion.div>
         )}
+      </motion.section>
+
+      {/* Hubungi Saya (Contact Section) */}
+      <motion.section variants={itemVariants} className="pt-8 pb-12" aria-label="Hubungi Saya">
+        <div className="glass-panel p-6 md:p-12 relative overflow-hidden flex flex-col md:flex-row gap-12">
+          {/* Ornamen Latar */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="md:w-1/2 space-y-6">
+            <h2 className="text-3xl md:text-5xl font-black tracking-tight text-foreground bg-clip-text text-transparent bg-gradient-to-br from-primary to-pink-500">
+              Mari Berkolaborasi!
+            </h2>
+            <p className="text-foreground/80 leading-relaxed font-medium text-sm md:text-base max-w-sm">
+              Tertarik dengan profil saya? Punya ide proyek seru atau sekadar ingin bertegur sapa? Jangan ragu untuk meninggalkan pesan di sini.
+            </p>
+            <div className="flex items-center gap-4 text-sm font-bold text-muted-foreground pt-4">
+              <Mail className="w-5 h-5 text-primary" /> faisalfajar1305@gmail.com
+            </div>
+          </div>
+
+          <div className="md:w-1/2 relative z-10">
+            <form onSubmit={handleContactSubmit} className="space-y-4 bg-background/50 backdrop-blur-sm p-6 md:p-8 rounded-3xl border border-border/50 shadow-xl">
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider pl-1">Nama Anda</label>
+                <input 
+                  required
+                  type="text" 
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                  placeholder="John Doe" 
+                  className="w-full px-4 py-3 text-sm rounded-2xl border border-border bg-background/80 text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider pl-1">Email Anda</label>
+                <input 
+                  required
+                  type="email" 
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  placeholder="john@example.com" 
+                  className="w-full px-4 py-3 text-sm rounded-2xl border border-border bg-background/80 text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
+                />
+              </div>
+              <div className="space-y-1">
+                <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider pl-1">Pesan</label>
+                <textarea 
+                  required
+                  rows={4}
+                  value={contactMsg}
+                  onChange={(e) => setContactMsg(e.target.value)}
+                  placeholder="Halo Fajar, saya tertarik dengan..." 
+                  className="w-full px-4 py-3 text-sm rounded-2xl border border-border bg-background/80 text-foreground focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none"
+                />
+              </div>
+              
+              <button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-full mt-2 inline-flex items-center justify-center gap-2 px-6 py-3.5 font-bold rounded-2xl transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:-translate-y-0.5 active:translate-y-0 active:scale-95 bg-primary text-primary-foreground disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:translate-y-0"
+              >
+                {isSubmitting ? (
+                  <><Loader2 className="w-5 h-5 animate-spin" /> Mengirim...</>
+                ) : submitStatus === 'success' ? (
+                  <><CheckCircle2 className="w-5 h-5" /> Pesan Terkirim!</>
+                ) : (
+                  <><Send className="w-5 h-5" /> Kirim Pesan Sekarang</>
+                )}
+              </button>
+              
+              {submitStatus === 'error' && (
+                <p className="text-xs text-red-500 font-semibold text-center mt-2">Gagal mengirim pesan, silakan coba lagi.</p>
+              )}
+            </form>
+          </div>
+        </div>
       </motion.section>
     </motion.div>
   );

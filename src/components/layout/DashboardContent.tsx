@@ -10,7 +10,7 @@ import { PlaygroundView } from '../playground/PlaygroundView';
 import { SharingView } from '../sharing/SharingView';
 import { AdminPanel } from '../admin/AdminPanel';
 import { LoginModal } from '../auth/LoginModal';
-import { Project, BlogPost, ShareLink, User } from '../../types';
+import { Project, BlogPost, ShareLink, User, PlaygroundApp } from '../../types';
 import {
   createProject,
   updateProject,
@@ -26,12 +26,14 @@ interface DashboardContentProps {
   initialProjects: Project[];
   initialBlogs: BlogPost[];
   initialLinks: ShareLink[];
+  initialApps: PlaygroundApp[];
 }
 
 export const DashboardContent: React.FC<DashboardContentProps> = ({
   initialProjects,
   initialBlogs,
-  initialLinks
+  initialLinks,
+  initialApps
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -43,6 +45,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
   const [projects, setProjects] = useState<Project[]>(initialProjects);
   const [blogs, setBlogs] = useState<BlogPost[]>(initialBlogs);
   const [links, setLinks] = useState<ShareLink[]>(initialLinks);
+  const [apps, setApps] = useState<PlaygroundApp[]>(initialApps);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const isAdmin = currentUser?.role === 'admin';
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -68,6 +71,13 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
     }, 0);
     return () => clearTimeout(timer);
   }, [initialLinks]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setApps(initialApps);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [initialApps]);
 
   // Sync user state with LocalStorage on client mount
   useEffect(() => {
@@ -226,7 +236,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
       case 'blog':
         return <BlogView blogs={blogs} isAdmin={isAdmin} currentUser={currentUser} />;
       case 'playground':
-        return <PlaygroundView />;
+        return <PlaygroundView apps={apps} />;
       case 'sharing':
         return <SharingView links={links} setLinks={saveLinks} isAdmin={isAdmin} currentUser={currentUser} />;
       case 'admin':
@@ -238,6 +248,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({
             setBlogs={saveBlogs}
             links={links}
             setLinks={saveLinks}
+            apps={apps}
+            setApps={setApps}
             currentUser={currentUser}
           />
         ) : (

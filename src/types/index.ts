@@ -25,6 +25,7 @@ export interface BlogPost {
   content: string; // Markdown or rich HTML
   tags: string[];
   readTime: string;
+  views?: number;
 }
 
 export interface ShareLink {
@@ -35,4 +36,14 @@ export interface ShareLink {
   url: string;
   createdAt: string;
   slug: string;
+}
+
+export interface PlaygroundApp {
+  id: string;
+  name: string;
+  description: string;
+  iconName: string;
+  url: string;
+  color: string;
+  status: string;
 }

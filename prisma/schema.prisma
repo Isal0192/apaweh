@@ -37,6 +37,7 @@ model BlogPost {
   content  String @db.LongText
   tags     String // Comma-separated tags
   readTime String
+  views    Int    @default(0)
 }
 
 model ShareLink {
@@ -47,4 +48,23 @@ model ShareLink {
   url         String @db.Text
   createdAt   String
   slug        String? @unique
+}
+
+model ContactMessage {
+  id        String   @id @default(uuid())
+  name      String
+  email     String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+  isRead    Boolean  @default(false)
+}
+
+model PlaygroundApp {
+  id          String @id @default(uuid())
+  name        String
+  description String @db.Text
+  iconName    String
+  url         String @db.Text
+  color       String
+  status      String
 }

@@ -179,6 +179,22 @@ export async function getBlogs() {
   }
 }
 
+export async function incrementBlogViews(slug: string) {
+  try {
+    const blog = await prisma.blogPost.findUnique({ where: { slug } });
+    if (!blog) return { success: false };
+
+    await prisma.blogPost.update({
+      where: { slug },
+      data: { views: { increment: 1 } }
+    });
+    return { success: true };
+  } catch (error) {
+    console.error('incrementBlogViews error:', error);
+    return { success: false };
+  }
+}
+
 export async function getBlogBySlug(slug: string) {
   try {
     const blog = await prisma.blogPost.findUnique({
@@ -334,6 +350,138 @@ export async function deleteLink(id: string) {
     return { success: true };
   } catch (error: any) {
     console.error('deleteLink error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+// ==========================================
+// CONTACT MESSAGE ACTIONS
+// ==========================================
+
+export async function createContactMessage(name: string, email: string, message: string) {
+  try {
+    await prisma.contactMessage.create({
+      data: { name, email, message },
+    });
+    return { success: true };
+  } catch (error: any) {
+    console.error('createContactMessage error:', error);
+    return { success: false, error: 'Gagal mengirim pesan.' };
+  }
+}
+
+export async function getContactMessages() {
+  try {
+    const messages = await prisma.contactMessage.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return messages;
+  } catch (error) {
+    console.error('getContactMessages error:', error);
+    return [];
+  }
+}
+
+export async function deleteContactMessage(id: string) {
+  try {
+    await prisma.contactMessage.delete({ where: { id } });
+    return { success: true };
+  } catch (error) {
+    console.error('deleteContactMessage error:', error);
+    return { success: false };
+  }
+}
+
+export async function getDashboardStats() {
+  try {
+    const [totalProjects, totalBlogs, totalLinks, messages] = await Promise.all([
+      prisma.project.count(),
+      prisma.blogPost.count(),
+      prisma.shareLink.count(),
+      prisma.contactMessage.count()
+    ]);
+    
+    const viewsAggr = await prisma.blogPost.aggregate({
+      _sum: { views: true }
+    });
+    
+    return {
+      totalProjects,
+      totalBlogs,
+      totalLinks,
+      totalViews: viewsAggr._sum.views || 0,
+      totalMessages: messages,
+    };
+  } catch (error) {
+    console.error('getDashboardStats error:', error);
+    return { totalProjects: 0, totalBlogs: 0, totalLinks: 0, totalViews: 0, totalMessages: 0 };
+  }
+}
+
+// ==========================================
+// PLAYGROUND APP ACTIONS
+// ==========================================
+
+export async function getPlaygroundApps() {
+  try {
+    const apps = await prisma.playgroundApp.findMany();
+    return apps;
+  } catch (error) {
+    console.error('getPlaygroundApps error:', error);
+    return [];
+  }
+}
+
+export async function createPlaygroundApp(data: Omit<PlaygroundApp, 'id'>) {
+  try {
+    const app = await prisma.playgroundApp.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        iconName: data.iconName,
+        url: data.url,
+        color: data.color,
+        status: data.status,
+      },
+    });
+    revalidatePath('/');
+    return { success: true, app };
+  } catch (error: any) {
+    console.error('createPlaygroundApp error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function updatePlaygroundApp(id: string, data: Omit<PlaygroundApp, 'id'>) {
+  try {
+    const app = await prisma.playgroundApp.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description,
+        iconName: data.iconName,
+        url: data.url,
+        color: data.color,
+        status: data.status,
+      },
+    });
+    revalidatePath('/');
+    return { success: true, app };
+  } catch (error: any) {
+    console.error('updatePlaygroundApp error:', error);
+    return { success: false, error: error.message };
+  }
+}
+
+export async function deletePlaygroundApp(id: string) {
+  try {
+    await prisma.playgroundApp.delete({
+      where: { id },
+    });
+    revalidatePath('/');
+    return { success: true };
+  } catch (error: any) {
+    console.error('deletePlaygroundApp error:', error);
     return { success: false, error: error.message };
   }
 }

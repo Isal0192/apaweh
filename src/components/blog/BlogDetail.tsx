@@ -1,10 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BlogPost } from '../../types';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar, BookOpen, ExternalLink } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowLeft, Calendar, BookOpen, Eye } from 'lucide-react';
+import { incrementBlogViews } from '../../app/actions';
 import { sanitizeHtml } from '../../utils/sanitize';
 
 interface BlogDetailProps {
@@ -20,6 +20,22 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
   handleClosePost,
   handleOpenPost,
 }) => {
+  const [localViews, setLocalViews] = useState(selectedPost.views || 0);
+
+  useEffect(() => {
+    let isMounted = true;
+    const updateView = async () => {
+      const res = await incrementBlogViews(selectedPost.slug);
+      if (res.success && isMounted) {
+        setLocalViews((v) => v + 1);
+      }
+    };
+    updateView();
+    return () => {
+      isMounted = false;
+    };
+  }, [selectedPost.slug]);
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }}
@@ -53,6 +69,10 @@ export const BlogDetail: React.FC<BlogDetailProps> = ({
               <span className="flex items-center gap-1.5 bg-black/5 dark:bg-white/5 px-2.5 py-1.5 rounded-lg border border-border/50 font-semibold backdrop-blur-sm">
                 <BookOpen className="w-4 h-4 text-primary" />
                 {selectedPost.readTime}
+              </span>
+              <span className="flex items-center gap-1.5 bg-black/5 dark:bg-white/5 px-2.5 py-1.5 rounded-lg border border-border/50 font-semibold backdrop-blur-sm">
+                <Eye className="w-4 h-4 text-primary" />
+                {localViews} Kali Dilihat
               </span>
               <div className="flex-1" />
             </div>
